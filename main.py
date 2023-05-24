@@ -11,29 +11,23 @@ import argparse
 '''
 
 
-
-
-example_text = sys.argv[1]
-sample_rate = 48000
-speaker='kseniya'
-
-
-
-# os.startfile('test.wav')
-
 def Init():
 
     arg = argparse.ArgumentParser()
 
-    arg.add_argument('-text', help='Ввод текста для озвучки')
+    arg.add_argument('-text', help='Ввод текста для озвучки', required=True)
     arg.add_argument('-voice', help='Выбор голоса. По умолчанию kseniya',
                      choices=['aidar', 'baya', 'kseniya', 'xenia', 'eugene', 'random'],
                      default='kseniya')
+    arg.add_argument('-rate', help='установить качество звука. По умолчанию 48000',
+                     choices=[8000, 24000, 48000], default=48000)
 
     args = arg.parse_args()
     print(args)
 
-def Torching(text_for_speach):
+    Torching(text_for_speach=args.text, voice=args.voice, rate=args.rate)
+
+def Torching(*, text_for_speach, voice, rate):
 
     device = torch.device('cpu')
     torch.set_num_threads(4)
@@ -47,7 +41,7 @@ def Torching(text_for_speach):
     model.to(device)
 
     audio_paths = model.save_wav(text=text_for_speach,
-                                 speaker=speaker,
-                                 sample_rate=sample_rate)
+                                 speaker=voice,
+                                 sample_rate=rate)
 
 Init()
