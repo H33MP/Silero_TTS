@@ -2,6 +2,7 @@ import os
 import torch
 import sys
 import argparse
+from datetime import datetime
 
 
 '''
@@ -21,13 +22,13 @@ def Init():
                      default='kseniya')
     arg.add_argument('-rate', help='установить качество звука. По умолчанию 48000',
                      choices=[8000, 24000, 48000], default=48000)
+    arg.add_argument('-name', help='Имя сохраняемого файла', default=datetime.strftime(datetime.now(), '%H.%M.%S_%d.%m.%Y'))
 
     args = arg.parse_args()
-    print(args)
 
-    Torching(text_for_speach=args.text, voice=args.voice, rate=args.rate)
+    Torching(text_for_speach=args.text, voice=args.voice, rate=args.rate, file_name=f'{args.name}.wav')
 
-def Torching(*, text_for_speach, voice, rate):
+def Torching(*, text_for_speach, voice, rate, file_name):
 
     device = torch.device('cpu')
     torch.set_num_threads(4)
@@ -42,6 +43,7 @@ def Torching(*, text_for_speach, voice, rate):
 
     audio_paths = model.save_wav(text=text_for_speach,
                                  speaker=voice,
-                                 sample_rate=rate)
+                                 sample_rate=rate,
+                                 audio_path=file_name)
 
 Init()
