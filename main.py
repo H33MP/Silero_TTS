@@ -1,6 +1,5 @@
 import os
 import torch
-import sys
 import argparse
 from datetime import datetime
 
@@ -34,6 +33,9 @@ def Torching(*, text_for_speach, voice, rate, file_name):
     torch.set_num_threads(4)
     local_file = 'model.pt'
 
+    if not os.path.isdir('output'):
+        os.mkdir('output')
+
     if not os.path.isfile(local_file):
         torch.hub.download_url_to_file('https://models.silero.ai/models/tts/ru/v3_1_ru.pt',
                                        local_file)
@@ -44,6 +46,6 @@ def Torching(*, text_for_speach, voice, rate, file_name):
     audio_paths = model.save_wav(text=text_for_speach,
                                  speaker=voice,
                                  sample_rate=rate,
-                                 audio_path=file_name)
+                                 audio_path=f'output\\{file_name}')
 
 Init()
