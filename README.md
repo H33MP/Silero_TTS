@@ -31,3 +31,9 @@ pyinstaller -F --hidden-import wave main.py
 ```
 pyinstaller -D --hidden-import wave main.py
 ```
+
+Для сборки необходимо установить pyinstaller:
+
+```
+pip install pyinstaller
+```
